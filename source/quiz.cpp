@@ -20,20 +20,22 @@ void initQuiz() {
 
     Question currentQuestion;
     int answerCount = 0;
+
     while (!in.atEnd()) {
         QString line = in.readLine();
 
-        if (answerCount < 4) {
-            currentQuestion.answers[answerCount] = line;
+        if (answerCount == 0) {
+            currentQuestion.question = line;
+            ++answerCount;
+        } else if (answerCount <= 4) {
+            currentQuestion.answers[answerCount - 1] = line;
             ++answerCount;
         } else {
-            currentQuestion.question = line;
-            in >> currentQuestion.correctAnswer;
-            in.readLine(); // Пропускаем символ новой строки
-
+            currentQuestion.correctAnswer = line.toInt();
             questions.push_back(currentQuestion); // Добавляем вопрос в вектор
             answerCount = 0; // Сбрасываем счетчик ответов
         }
+
     }
 
     inputFile.close();
@@ -92,4 +94,3 @@ void Quiz::checkAnswer()
         QMessageBox::warning(this, "Упс, ошибочка!", "Ответик неверный. Попробуйте еще раз!");
     }
 }
-
